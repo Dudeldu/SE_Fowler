@@ -4,7 +4,7 @@ import java.util.*;
 
 class Customer {
     private String name;
-    private Vector rentals = new Vector();
+    private Vector<Rental> rentals = new Vector<Rental>();
     public Customer (String newname){
         name = newname;
     }
@@ -20,14 +20,14 @@ class Customer {
     public String statement() {
         double totalAmount = 0;
         int frequentRenterPoints = 0;
-        Enumeration enum_rentals = rentals.elements();	    
+        Enumeration<Rental> enum_rentals = rentals.elements();
         StringBuilder result = new StringBuilder(getRentalRecordHeader());
 
         while (enum_rentals.hasMoreElements()) {
             double thisAmount;
-            Rental each = (Rental) enum_rentals.nextElement();
+            Rental each = enum_rentals.nextElement();
             //determine amounts for each line
-            thisAmount = amountFor(each);
+            thisAmount = each.getCharge();
             // add frequent renter points
             frequentRenterPoints ++;
             // add bonus for a two day new release rental
@@ -48,26 +48,6 @@ class Customer {
     private String getRentalRecordHeader() {
         return "Rental Record for " + this.getName() + "\n" +
                 "\t" + "Title" + "\t" + "\t" + "Days" + "\t" + "Amount" + "\n";
-    }
-
-    private double amountFor(Rental rental) {
-        double resultAmount = 0;
-        switch (rental.getMovie().getPriceCode()) {
-            case Movie.REGULAR:
-                resultAmount += 2;
-                if (rental.getDaysRented() > 2)
-                    resultAmount += (rental.getDaysRented() - 2) * 1.5;
-                break;
-            case Movie.NEW_RELEASE:
-                resultAmount += rental.getDaysRented() * 3;
-                break;
-            case Movie.CHILDRENS:
-                resultAmount += 1.5;
-                if (rental.getDaysRented() > 3)
-                    resultAmount += (rental.getDaysRented() - 3) * 1.5;
-                break;
-        }
-        return resultAmount;
     }
 
 }
