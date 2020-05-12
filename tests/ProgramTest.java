@@ -1,3 +1,5 @@
+
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
@@ -5,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 class ProgramTest {
 
     @Test
-    void test_rental_statement_1(){
+    void test_rental_statement_1() throws InvalidArgumentException {
         String result;
         Movie m1 = new Movie("movie1", 1);
         Movie m2 = new Movie("movie2", 2);
@@ -24,7 +26,7 @@ class ProgramTest {
     }
 
     @Test
-    void test_rental_statement_2(){
+    void test_rental_statement_2() throws InvalidArgumentException {
         String result;
         Movie m1 = new Movie("m1", 0);
         Movie m2 = new Movie("m2", 2);
@@ -43,7 +45,7 @@ class ProgramTest {
     }
 
     @Test
-    void test_rental_statement_3(){
+    void test_rental_statement_3() throws InvalidArgumentException {
         String result;
         Movie m1 = new Movie("movie1", 1);
         Rental r1 = new Rental(m1, 1);

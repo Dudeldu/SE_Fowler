@@ -33,7 +33,7 @@ class Customer {
     private int getTotalRenterPoints(){
         int totalRenterPoints = 0;
         for(Rental rental: rentals){
-            totalRenterPoints += getFrequentRenterPoints(rental);
+            totalRenterPoints += rental.getFrequentRenterPoints();
         }
         return totalRenterPoints;
     }
@@ -44,14 +44,6 @@ class Customer {
             totalChargeAmount += rental.getCharge();
         }
         return totalChargeAmount;
-    }
-
-    private int getFrequentRenterPoints(Rental rental) {
-        // add frequent renter points
-        // add bonus for a two day new release rental
-        if ((rental.getMovie().getPriceCode() == Movie.NEW_RELEASE) && rental.getDaysRented() > 1)
-            return 2;
-        return 1;
     }
 
     private String getRentalRecordFooter(double totalAmount, int frequentRenterPoints) {
