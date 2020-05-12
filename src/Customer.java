@@ -18,27 +18,40 @@ class Customer {
     }
 
     public String statement() {
-        double totalAmount = 0;
-        int frequentRenterPoints = 0;
         Enumeration<Rental> enum_rentals = rentals.elements();
         StringBuilder result = new StringBuilder(getRentalRecordHeader());
 
         while (enum_rentals.hasMoreElements()) {
-            double thisAmount;
-            Rental each = enum_rentals.nextElement();
-            //determine amounts for each line
-            thisAmount = each.getCharge();
-            // add frequent renter points
-            frequentRenterPoints ++;
-            // add bonus for a two day new release rental
-            if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE) && each.getDaysRented() > 1)
-                frequentRenterPoints ++;
+            Rental rental = enum_rentals.nextElement();
             //show figures for this rental
-            result.append("\t").append(each.getMovie().getTitle()).append("\t").append("\t").append(each.getDaysRented()).append("\t").append(thisAmount).append("\n");
-            totalAmount += thisAmount;
+            result.append(getRentalRecord(rental));
         }
-        result.append(getRentalRecordFooter(totalAmount, frequentRenterPoints));
+        result.append(getRentalRecordFooter(getTotalChargeAmount(), getTotalRenterPoints()));
         return result.toString();
+    }
+
+    private int getTotalRenterPoints(){
+        int totalRenterPoints = 0;
+        for(Rental rental: rentals){
+            totalRenterPoints += getFrequentRenterPoints(rental);
+        }
+        return totalRenterPoints;
+    }
+
+    private double getTotalChargeAmount(){
+        double totalChargeAmount = 0;
+        for(Rental rental: rentals){
+            totalChargeAmount += rental.getCharge();
+        }
+        return totalChargeAmount;
+    }
+
+    private int getFrequentRenterPoints(Rental rental) {
+        // add frequent renter points
+        // add bonus for a two day new release rental
+        if ((rental.getMovie().getPriceCode() == Movie.NEW_RELEASE) && rental.getDaysRented() > 1)
+            return 2;
+        return 1;
     }
 
     private String getRentalRecordFooter(double totalAmount, int frequentRenterPoints) {
@@ -48,6 +61,10 @@ class Customer {
     private String getRentalRecordHeader() {
         return "Rental Record for " + this.getName() + "\n" +
                 "\t" + "Title" + "\t" + "\t" + "Days" + "\t" + "Amount" + "\n";
+    }
+
+    private String getRentalRecord(Rental rental) {
+        return "\t" + rental.getMovie().getTitle() + "\t" + "\t" + rental.getDaysRented() + "\t" + rental.getCharge() + "\n";
     }
 
 }
